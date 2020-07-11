@@ -46,3 +46,36 @@ class TestCheckname():
     time.sleep(5)
     assert self.driver.current_url == 'https://www.avtodispetcher.ru/distance/',  'Не верный адрес перехода'  
 
+  def setup_method(self, method):
+    self.driver = webdriver.Chrome()
+    self.vars = {}
+
+  
+  def test_record(self):
+    self.driver.get("https://www.avtodispetcher.ru/distance/")
+    self.driver.set_window_size(1458, 1018)
+    self.driver.find_element(By.NAME, "from").send_keys("Тула")
+    self.driver.find_element(By.NAME, "to").send_keys("Санкт-Петербург")
+    self.driver.find_element(By.NAME, "fc").clear()
+    self.driver.find_element(By.NAME, "fc").send_keys("9")
+    self.driver.find_element(By.NAME, "fp").clear()
+    self.driver.find_element(By.NAME, "fp").send_keys("46")
+    self.driver.find_element(By.CSS_SELECTOR, ".submit_button > input").click()
+    
+    time.sleep(2)
+    range_path = self.driver.find_element_by_xpath('//*[@id="totalDistance"]').text
+    assert int(range_path) == 897, 'не верный километраж'
+    s = self.driver.find_element_by_xpath('//*[@id="summaryContainer"]/form/p').text
+    word_list = s.split()
+    num_list = []
+
+    for word in word_list:
+        if word.isnumeric():
+            num_list.append(int(word))
+
+    assert num_list[-1] == 3726, 'не верная стоимость'
+    time.sleep(1)
+
+  
+  def teardown_method(self, method):
+    self.driver.quit()

@@ -31,8 +31,18 @@ class TestRecord():
     
     time.sleep(2)
     range_path = self.driver.find_element_by_xpath('//*[@id="totalDistance"]').text
-    cost = self.driver.find_element_by_xpath('//*[@id="summaryContainer"]/form/p/text()[4]').getAttribute('innerHTML')
     assert int(range_path) == 897, 'не верный километраж'
-    assert cost == 3726, 'не верная стоимость'
+    s = self.driver.find_element_by_xpath('//*[@id="summaryContainer"]/form/p').text
+    word_list = s.split()
+    num_list = []
+
+    for word in word_list:
+        if word.isnumeric():
+            num_list.append(int(word))
+    
+    
+    assert num_list[-1] == 3726, 'не верная стоимость'
     time.sleep(1)
+
+
 
