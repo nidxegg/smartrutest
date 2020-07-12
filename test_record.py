@@ -27,9 +27,11 @@ class TestRecord():
     self.driver.find_element(By.NAME, "fc").send_keys("9")
     self.driver.find_element(By.NAME, "fp").clear()
     self.driver.find_element(By.NAME, "fp").send_keys("46")
+    target = self.driver.find_element(By.CSS_SELECTOR, ".submit_button > input")
+    target.location_once_scrolled_into_view
     self.driver.find_element(By.CSS_SELECTOR, ".submit_button > input").click()
     
-    time.sleep(2)
+    time.sleep(5)
     range_path = self.driver.find_element_by_xpath('//*[@id="totalDistance"]').text
     assert int(range_path) == 897, 'не верный километраж'
     s = self.driver.find_element_by_xpath('//*[@id="summaryContainer"]/form/p').text

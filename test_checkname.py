@@ -27,17 +27,9 @@ class TestCheckname():
   
   def test_checkname(self):
     """Переход должен быть на https://www.avtodispetcher.ru/distance/"""
-    # Test name: check_name
-    # Step # | name | target | value
-    # 1 | open | / | 
     self.driver.get("https://yandex.kz/")
-    # 2 | setWindowSize | 1458x874 | 
-    self.driver.set_window_size(1458, 874)
-    # 3 | click | id=text | 
     self.driver.find_element(By.ID, "text").click()
-    # 4 | type | id=text | расчет расстояний между городами 
     self.driver.find_element(By.ID, "text").send_keys("расчет расстояний между городами ")
-    # 5 | click | css=.mini-suggest__button | 
     self.driver.find_element(By.CSS_SELECTOR, ".mini-suggest__button").click()
     self.vars["window_handles"] = self.driver.window_handles
     self.driver.find_element(By.LINK_TEXT,"Расчет расстояний между городами").click()
@@ -50,17 +42,20 @@ class TestCheckname():
     self.driver = webdriver.Chrome()
     self.vars = {}
 
-  
   def test_record(self):
     self.driver.get("https://www.avtodispetcher.ru/distance/")
-    self.driver.set_window_size(1458, 1018)
+    element=self.driver.find_element(By.CSS_SELECTOR, ".submit_button > input")
+    element.location_once_scrolled_into_view
     self.driver.find_element(By.NAME, "from").send_keys("Тула")
     self.driver.find_element(By.NAME, "to").send_keys("Санкт-Петербург")
     self.driver.find_element(By.NAME, "fc").clear()
     self.driver.find_element(By.NAME, "fc").send_keys("9")
     self.driver.find_element(By.NAME, "fp").clear()
-    self.driver.find_element(By.NAME, "fp").send_keys("46")
+    self.driver.find_element(By.NAME, "fp").send_keys("46")    
+    target = self.driver.find_element(By.CSS_SELECTOR, ".submit_button > input")
+    target.location_once_scrolled_into_view
     self.driver.find_element(By.CSS_SELECTOR, ".submit_button > input").click()
+    
     
     time.sleep(2)
     range_path = self.driver.find_element_by_xpath('//*[@id="totalDistance"]').text
@@ -77,5 +72,33 @@ class TestCheckname():
     time.sleep(1)
 
   
-  def teardown_method(self, method):
-    self.driver.quit()
+  def test_changeCity(self):
+    self.driver.get("https://www.avtodispetcher.ru/distance/?from=%D0%A2%D1%83%D0%BB%D0%B0&to=%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3&v=&vt=car&rm=110&rp=90&rs=60&ru=40&fc=9&fp=46&ov=&atn=&aup=&atr=&afd=&ab=&acb=")
+    time.sleep(2)
+    target =  self.driver.find_element(By.CSS_SELECTOR, ".anchor")
+    target.location_once_scrolled_into_view
+    self.driver.find_element(By.CSS_SELECTOR, ".anchor").click()
+    self.driver.find_element(By.NAME, "v").send_keys("Великий Новгород")
+    target =  self.driver.find_element(By.CSS_SELECTOR, ".submit_button > input")
+    target.location_once_scrolled_into_view
+    self.driver.find_element(By.CSS_SELECTOR, ".submit_button > input").click()
+    
+    time.sleep(20)
+    target =  self.driver.find_element(By.CSS_SELECTOR, "p > input:nth-child(4)")
+    target.location_once_scrolled_into_view
+    self.driver.find_element(By.CSS_SELECTOR, "p > input:nth-child(4)").click()
+    time.sleep(5)
+    range_path = self.driver.find_element_by_xpath('//*[@id="totalDistance"]').text
+    assert int(range_path) == 966, 'не верный километраж'
+    s = self.driver.find_element_by_xpath('//*[@id="summaryContainer"]/form/p').text
+    word_list = s.split()
+    num_list = []
+
+    for word in word_list:
+        if word.isnumeric():
+            num_list.append(int(word))
+
+    assert num_list[-1] == 4002, 'не верная стоимость'
+    time.sleep(1)
+
+  
