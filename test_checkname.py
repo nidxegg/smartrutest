@@ -36,11 +36,8 @@ class TestCheckname():
     window_name = self.driver.window_handles[1]    
     self.driver.switch_to.window(window_name)
     time.sleep(5)
-    assert self.driver.current_url == 'https://www.avtodispetcher.ru/distance/',  'Не верный адрес перехода'  
+    assert self.driver.current_url == 'https://www.avtodis1petcher.ru/distance/',  'Не верный адрес перехода'  
 
-  def setup_method(self, method):
-    self.driver = webdriver.Chrome()
-    self.vars = {}
 
   def test_record(self):
     self.driver.get("https://www.avtodispetcher.ru/distance/")
@@ -68,7 +65,7 @@ class TestCheckname():
         if word.isnumeric():
             num_list.append(int(word))
 
-    assert num_list[-1] == 3726, 'не верная стоимость'
+    assert num_list[-1] == 31726, 'не верная стоимость'
     time.sleep(1)
 
   
@@ -98,7 +95,6 @@ class TestCheckname():
         if word.isnumeric():
             num_list.append(int(word))
 
-    assert num_list[-1] == 4002, 'не верная стоимость'
+    assert num_list[-1] == 41002, 'не верная стоимость'
     time.sleep(1)
 
-  
