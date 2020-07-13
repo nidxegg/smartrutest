@@ -4,7 +4,6 @@ import time
 import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
@@ -36,7 +35,7 @@ class TestCheckname():
     window_name = self.driver.window_handles[1]    
     self.driver.switch_to.window(window_name)
     time.sleep(5)
-    assert self.driver.current_url == 'https://www.avtodis1petcher.ru/distance/',  'Не верный адрес перехода'  
+    assert self.driver.current_url == 'https://www.avtodispetcher.ru/distance/',  'Не верный адрес перехода'  
 
 
   def test_record(self):
@@ -65,7 +64,7 @@ class TestCheckname():
         if word.isnumeric():
             num_list.append(int(word))
 
-    assert num_list[-1] == 31726, 'не верная стоимость'
+    assert num_list[-1] == 3726, 'не верная стоимость'
     time.sleep(1)
 
   
@@ -80,11 +79,11 @@ class TestCheckname():
     target.location_once_scrolled_into_view
     self.driver.find_element(By.CSS_SELECTOR, ".submit_button > input").click()
     
-    time.sleep(20)
+    time.sleep(60)
     target =  self.driver.find_element(By.CSS_SELECTOR, "p > input:nth-child(4)")
     target.location_once_scrolled_into_view
     self.driver.find_element(By.CSS_SELECTOR, "p > input:nth-child(4)").click()
-    time.sleep(5)
+    time.sleep(2)
     range_path = self.driver.find_element_by_xpath('//*[@id="totalDistance"]').text
     assert int(range_path) == 966, 'не верный километраж'
     s = self.driver.find_element_by_xpath('//*[@id="summaryContainer"]/form/p').text
@@ -95,6 +94,6 @@ class TestCheckname():
         if word.isnumeric():
             num_list.append(int(word))
 
-    assert num_list[-1] == 41002, 'не верная стоимость'
+    assert num_list[-1] == 4002, 'не верная стоимость'
     time.sleep(1)
 
